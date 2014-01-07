@@ -53,9 +53,9 @@ public class Buffer {
 				buffer.add(i);
 			}
 
-			// print info
-			System.out.println("Added " + values.length + " elements:");
-			printContent();
+//			// print info
+//			System.out.println("Added " + values.length + " elements:");
+//			printContent();
 
 			// release first position and notify another threads
 			firstProducerPositionOccupied = false;
@@ -101,9 +101,9 @@ public class Buffer {
 				elements[i] = buffer.remove();
 			}
 
-			// print info
-			System.out.println("Removed " + numberOfElements + " elements:");
-			printContent();
+//			// print info
+//			System.out.println("Removed " + numberOfElements + " elements:");
+//			printContent();
 
 			// release first position and notify another threads
 			firstConsumerPositionOccupied = false;
@@ -124,12 +124,12 @@ public class Buffer {
 		return buffer.size();
 	}
 
-	private void printContent() {
-		for(Integer i : buffer) {
-			System.out.print(i + " ");
-		}
-		System.out.println();
-	}	
+//	private void printContent() {
+//		for(Integer i : buffer) {
+//			System.out.print(i + " ");
+//		}
+//		System.out.println();
+//	}	
 
 }
 

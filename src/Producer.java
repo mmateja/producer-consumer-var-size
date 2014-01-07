@@ -1,28 +1,17 @@
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Producer implements Runnable {
 
 	private Buffer buffer;
-	int maxNumberOfElements;
+	Integer[][] values;
 	
-	public Producer(Buffer buffer, int maxNumberOfElements) {
+	public Producer(Buffer buffer, Integer[][] values) {
 		this.buffer = buffer;
-		this.maxNumberOfElements = maxNumberOfElements;
+		this.values = values;
 	}
 	
 	@Override
 	public void run() {
-		int numberOfElements;
-		Integer[] elements;
-		ThreadLocalRandom random = ThreadLocalRandom.current();
-		
-		while(true) {
-			numberOfElements = random.nextInt(maxNumberOfElements)+1;
-			elements = new Integer[numberOfElements];
-			for(int i=0; i<numberOfElements; i++) {
-				elements[i] = random.nextInt(10);
-			}
-			buffer.put(elements);
+		for(int i=values.length-1; i>=0; i--) {
+			buffer.put(values[i]);
 		}
 	}
 
