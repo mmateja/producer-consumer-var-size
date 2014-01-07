@@ -3,11 +3,13 @@ import java.util.concurrent.ThreadLocalRandom;
 public class Producer implements Runnable {
 
 	private Buffer buffer;
-	int maxNumberOfElements;
+	private int maxNumberOfElementsToPut;
+	private int totalNumberOfElementsLeft;
 	
-	public Producer(Buffer buffer, int maxNumberOfElements) {
+	public Producer(Buffer buffer, int maxNumberOfElementsToPut, int totalNumberOfElements) {
 		this.buffer = buffer;
-		this.maxNumberOfElements = maxNumberOfElements;
+		this.maxNumberOfElementsToPut = maxNumberOfElementsToPut;
+		this.totalNumberOfElementsLeft = totalNumberOfElements;
 	}
 	
 	@Override
@@ -16,13 +18,15 @@ public class Producer implements Runnable {
 		Integer[] elements;
 		ThreadLocalRandom random = ThreadLocalRandom.current();
 		
-		while(true) {
-			numberOfElements = random.nextInt(maxNumberOfElements)+1;
+		while(totalNumberOfElementsLeft > 0) {
+			numberOfElements = totalNumberOfElementsLeft <= maxNumberOfElementsToPut ? totalNumberOfElementsLeft : random.nextInt(maxNumberOfElementsToPut)+1;
+			totalNumberOfElementsLeft -= numberOfElements;
+			
 			elements = new Integer[numberOfElements];
 			for(int i=0; i<numberOfElements; i++) {
 				elements[i] = random.nextInt(10);
 			}
-			buffer.put(elements);
+			buffer.put(elements);			
 		}
 	}
 
