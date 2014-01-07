@@ -1,8 +1,7 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Producer implements Runnable {
 
-	private Random random = new Random();
 	private Buffer buffer;
 	int maxNumberOfElements;
 	
@@ -15,6 +14,7 @@ public class Producer implements Runnable {
 	public void run() {
 		int numberOfElements;
 		Integer[] elements;
+		ThreadLocalRandom random = ThreadLocalRandom.current();
 		
 		while(true) {
 			numberOfElements = random.nextInt(maxNumberOfElements)+1;

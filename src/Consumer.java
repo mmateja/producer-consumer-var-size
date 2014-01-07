@@ -1,8 +1,7 @@
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Consumer implements Runnable {
 
-	private Random random = new Random();
 	private Buffer buffer;
 	int maxNumberOfElements;
 	
@@ -14,7 +13,7 @@ public class Consumer implements Runnable {
 	@Override
 	public void run() {
 		int numberOfElements;
-		
+		ThreadLocalRandom random = ThreadLocalRandom.current();
 		while(true) {
 			numberOfElements = random.nextInt(maxNumberOfElements)+1;
 			buffer.get(numberOfElements);
