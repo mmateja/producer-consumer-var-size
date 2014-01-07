@@ -8,11 +8,11 @@ public class Buffer {
 
 	private Lock lock = new ReentrantLock();
 
-	private Condition producersCondition = lock.newCondition();	
-	private Condition consumersCondition = lock.newCondition();
-
 	private Condition firstProducerCondition = lock.newCondition();	
 	private Condition firstConsumerCondition = lock.newCondition();
+	
+	private Condition otherProducersCondition = lock.newCondition();	
+	private Condition otherConsumersCondition = lock.newCondition();
 
 	private boolean firstProducerPositionOccupied = false;
 	private boolean firstConsumerPositionOccupied = false;
@@ -30,7 +30,7 @@ public class Buffer {
 			// wait for first producer position to be unreserved
 			while(firstProducerPositionOccupied) {
 				try {
-					producersCondition.await();
+					otherProducersCondition.await();
 				} catch (InterruptedException e) {
 					// ignore
 				}
@@ -59,7 +59,7 @@ public class Buffer {
 
 			// release first position and notify another threads
 			firstProducerPositionOccupied = false;
-			producersCondition.signal();
+			otherProducersCondition.signal();
 			firstConsumerCondition.signal();
 		} finally {			
 			lock.unlock();
@@ -77,7 +77,7 @@ public class Buffer {
 			// wait for first consumer position to be unreserved
 			while(firstConsumerPositionOccupied) {
 				try {
-					consumersCondition.await();
+					otherConsumersCondition.await();
 				} catch (InterruptedException e) {
 					// ignore
 				}
@@ -107,7 +107,7 @@ public class Buffer {
 
 			// release first position and notify another threads
 			firstConsumerPositionOccupied = false;
-			consumersCondition.signal();
+			otherConsumersCondition.signal();
 			firstProducerCondition.signal();
 		} finally {
 			lock.unlock();
@@ -132,3 +132,4 @@ public class Buffer {
 	}	
 
 }
+
